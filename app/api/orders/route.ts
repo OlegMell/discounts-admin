@@ -1,12 +1,9 @@
-import dbConnect from './../../../db';
 import Order from './../../models/order';
 import Discount from './../../models/product';
-import Sale from './../../models/sale';
-import Shop from './../../models/shop';
 
 export async function GET( request: Request ) {
     try {
-        await dbConnect();
+        // await dbConnect();
 
         const { searchParams } = new URL( request.url );
         const date = searchParams.get( 'date' );
@@ -32,7 +29,7 @@ export async function GET( request: Request ) {
         const orders = await Order.find( query ).populate( { path: 'items.productId', model: Discount } ).populate( {
             path: 'sale',
             populate: { path: 'shop' }
-        } ) .sort( { createdAt: -1 } );
+        } ).sort( { createdAt: -1 } );
 
         return Response.json( orders );
     } catch ( error ) {

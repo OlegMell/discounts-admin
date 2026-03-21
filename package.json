@@ -9,9 +9,12 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "dotenv": "^17.3.1",
+    "mongoose": "^9.2.4",
     "next": "16.1.6",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "@mendable/firecrawl-js": "^4.15.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

@@ -23,4 +23,94 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  height: 100vh;
+}
+
+.container-c {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.add-shop-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+main {
+  margin: auto;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main {
+  display: flex;
+  margin: auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+
+  h2 {
+    font-size: 1.2rem;
+  }
+}
+
+.input {
+  border: 1px solid var(--foreground);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 1.2rem;
+  padding: 5px 2.5px;
+  width: 100%;
+}
+
+option {
+  background: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+.site-button {
+  background: var(--foreground);
+  color: var(--background);
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 40px;
+  padding: 20px;
+  box-sizing: border-box;
+
+  .header-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  nav {
+    display: flex;
+    gap: 1rem;
+
+    .nav-link {
+      color: var(--foreground);
+      text-decoration: none;
+      font-size: 1.2rem;
+    }
+  }
+}
+
+.cols {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 100px;
 }

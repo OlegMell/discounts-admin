@@ -1,0 +1,42 @@
+import dbConnect from './../../../db';
+import Order from './../../models/order';
+import Discount from './../../models/product';
+import Sale from './../../models/sale';
+import Shop from './../../models/shop';
+
+export async function GET( request: Request ) {
+    try {
+        await dbConnect();
+
+        const { searchParams } = new URL( request.url );
+        const date = searchParams.get( 'date' );
+        const shop = searchParams.get( 'shop' );
+
+        const query: any = {};
+        if ( date ) {
+            const startOfDay = new Date( date );
+            startOfDay.setHours( 0, 0, 0, 0 );
+            const endOfDay = new Date( date );
+            endOfDay.setHours( 23, 59, 59, 999 );
+
+            query.createdAt = {
+                $gte: startOfDay,
+                $lt: endOfDay,
+            };
+        }
+
+        if ( shop ) {
+            query[ 'sale.shop.title' ] = shop;
+        }
+
+        const orders = await Order.find( query ).populate( { path: 'items.productId', model: Discount } ).populate( {
+            path: 'sale',
+            populate: { path: 'shop' }
+        } ) .sort( { createdAt: -1 } );
+
+        return Response.json( orders );
+    } catch ( error ) {
+        console.error( 'Error fetching orders:', error );
+        return Response.json( { error: 'Failed to fetch orders' }, { status: 500 } );
+    }
+}

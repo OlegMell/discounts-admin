@@ -1,4 +1,6 @@
 import Order from './../../models/order';
+import Sale from './../../models/sale';
+import Shop from './../../models/shop';
 import Discount from './../../models/product';
 
 export async function GET( request: Request ) {

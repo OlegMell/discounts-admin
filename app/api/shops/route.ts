@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import dbConnect from '../../../db';
 import Shop from './../../models/shop';
 
 export async function GET() {
     try {
-        await dbConnect();
         const shops = await Shop.find( {} );
         return NextResponse.json( shops );
     } catch ( error ) {
@@ -14,7 +12,6 @@ export async function GET() {
 
 export async function POST( request: NextRequest ) {
     try {
-        await dbConnect();
         const { title, link } = await request.json();
         const newShop = new Shop( { title, link } );
         await newShop.save();

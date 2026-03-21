@@ -1,6 +1,5 @@
 import Firecrawl from '@mendable/firecrawl-js';
 import mongoose from 'mongoose';
-import dbConnect from '../../../db';
 import Discount from './../../models/product';
 import SaleModel from './../../models/sale';
 
@@ -43,7 +42,6 @@ export async function GET( req: any ) {
     } );
 
     if ( scrapeResponse.success ) {
-        await dbConnect();
 
         const products = scrapeResponse.data.products.map( ( p: any ) => ( { ...p, commision: parseFloat( commision || '1.1' ), shop: shop ? new mongoose.Types.ObjectId( `${ shop }` ) : undefined } ) );
         console.log( { products } );

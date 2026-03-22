@@ -24,9 +24,9 @@ export async function GET( request: Request ) {
             };
         }
 
-        if ( shop ) {
-            query[ 'sale.shop.title' ] = shop;
-        }
+        // if ( shop ) {
+        //     query[ 'sale.shop.title' ] = shop;
+        // }
 
         const orders = await Order.find( query ).populate( { path: 'items.productId', model: Discount } ).populate( {
             path: 'sale',

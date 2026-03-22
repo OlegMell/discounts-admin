@@ -27,9 +27,16 @@ type Order = {
     createdAt: string;
 };
 
+/** Calendar YYYY-MM-DD → uk-UA; use local Y/M/D (not Date.parse) so server/client match. */
+function formatCalendarDayLabel( isoYmd: string ) {
+    const [ y, m, d ] = isoYmd.split( '-' ).map( Number );
+    return new Date( y, m - 1, d ).toLocaleDateString( 'uk-UA' );
+}
+
 export default function OrdersPage() {
     const [ orders, setOrders ] = useState<Order[]>( [] );
-    const [ selectedDate, setSelectedDate ] = useState( new Date().toISOString().split( 'T' )[ 0 ] );
+    /** null until client mount — avoids SSR/client mismatch from Date/timezone */
+    const [ selectedDate, setSelectedDate ] = useState<string | null>( null );
     const [ selectedShop, setSelectedShop ] = useState( '' );
     const [ loading, setLoading ] = useState( false );
     const [ showCalendar, setShowCalendar ] = useState( false );
@@ -57,6 +64,11 @@ export default function OrdersPage() {
     };
 
     useEffect( () => {
+        setSelectedDate( new Date().toISOString().split( 'T' )[ 0 ] );
+    }, [] );
+
+    useEffect( () => {
+        if ( selectedDate === null ) return;
         fetchOrders( selectedDate || undefined, selectedShop === '' ? undefined : selectedShop );
     }, [ selectedDate, selectedShop ] );
 
@@ -88,7 +100,11 @@ export default function OrdersPage() {
     };
 
     const formatDate = ( dateString: string ) => {
-        return new Date( dateString ).toLocaleString( 'uk-UA' );
+        return new Intl.DateTimeFormat( 'uk-UA', {
+            dateStyle: 'short',
+            timeStyle: 'short',
+            timeZone: 'Europe/Kyiv',
+        } ).format( new Date( dateString ) );
     };
 
     // Get unique shops from all orders
@@ -119,7 +135,11 @@ export default function OrdersPage() {
                                 textAlign: 'left'
                             }}
                         >
-                            {selectedDate ? new Date( selectedDate ).toLocaleDateString( 'uk-UA' ) : 'Виберіть дату'}
+                            {selectedDate === null
+                                ? '…'
+                                : selectedDate
+                                    ? formatCalendarDayLabel( selectedDate )
+                                    : 'Виберіть дату'}
                         </button>
                         {showCalendar && (
                             <div className="calendar-container" style={{
@@ -130,7 +150,7 @@ export default function OrdersPage() {
                                 marginTop: '4px'
                             }}>
                                 <Calendar
-                                    selectedDate={selectedDate}
+                                    selectedDate={selectedDate ?? ''}
                                     onDateSelect={handleDateChange}
                                 />
                             </div>

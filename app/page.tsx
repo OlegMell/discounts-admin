@@ -12,6 +12,7 @@ export default function Home() {
   const [ maxPrice, setMaxPrice ] = useState( '' );
   const [ count, setCount ] = useState( '' );
   const [ commision, setCommision ] = useState( 1.1 );
+  const [ currency, setCurrency ] = useState( 'USD' );
 
   const [ shops, setShops ] = useState( [] );
   const [ selectedShop, setSelectedShop ] = useState( '' );
@@ -35,7 +36,7 @@ export default function Home() {
 
     setIsLoading( true );
     try {
-      const response = await fetch( `/api/discounts?link=${ encodeURIComponent( siteLink ) }&shop=${ encodeURIComponent( selectedShop ) }&minimalCartPrice=${ encodeURIComponent( minimalCartPrice ) }&minPrice=${ encodeURIComponent( minPrice ) }&maxPrice=${ encodeURIComponent( maxPrice ) }&count=${ encodeURIComponent( count ) }&commision=${ encodeURIComponent( commision.toString() ) }` );
+      const response = await fetch( `/api/discounts?link=${ encodeURIComponent( siteLink ) }&shop=${ encodeURIComponent( selectedShop ) }&minimalCartPrice=${ encodeURIComponent( minimalCartPrice ) }&minPrice=${ encodeURIComponent( minPrice ) }&maxPrice=${ encodeURIComponent( maxPrice ) }&count=${ encodeURIComponent( count ) }&commision=${ encodeURIComponent( commision.toString() ) }&currency=${ encodeURIComponent( currency ) }` );
 
       if ( response.ok ) {
         const data = await response.json();
@@ -64,6 +65,8 @@ export default function Home() {
           </select>
           <label>Введіть посилання на сторінку зі знижками</label>
           <input className='site-input input' type="text" disabled={isLoading} name="site" placeholder='https://...' value={siteLink} onChange={( e ) => setSiteLink( e.target.value )} />
+          <label>Введіть валюту cайту</label>
+          <input className='currency-input input' type="text" disabled={isLoading} name="currency" placeholder='USD, EUR, GBP...' value={currency} onChange={( e ) => setCurrency( e.target.value.toUpperCase() )} />
           <label>Введіть комісію</label>
           <input className='commision-input input' type="text" disabled={isLoading} name="commision" placeholder='Комісія' value={commision} onChange={( e ) => setCommision( parseFloat( e.target.value ) )} />
           <label>Введіть мінімальну суму кошика</label>

@@ -32,6 +32,7 @@ export async function GET( req: any ) {
     const maxPrice = searchParams.get( 'maxPrice' );
     const count = searchParams.get( 'count' );
     const commision = searchParams.get( 'commision' );
+    const currency = searchParams.get( 'currency' );
 
     const app = new Firecrawl( { apiKey: process.env.Firecrawl_API_KEY } );
     // Scrape a website
@@ -53,6 +54,7 @@ export async function GET( req: any ) {
             products: discountDocs.map( p => p._id ),
             minCartCost: minimalCartPrice ? parseFloat( minimalCartPrice ) : 0,
             commission: parseFloat( commision || '1.1' ),
+            currency: currency || 'USD',
             totalPrice: 100
         } );
 

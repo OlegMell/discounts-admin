@@ -1,4 +1,4 @@
-import dbConnect from '../../../db';
+import dbConnect from './../../../db';
 import Order from './../../models/order';
 
 /** Must run before Order queries: Order schema refs Sale, Shop, Discount.
@@ -6,9 +6,9 @@ import Order from './../../models/order';
  *  bundler could drop `db.ts` side-effect imports — dynamic import cannot be tree-shaken. */
 async function ensureRefModels() {
     await Promise.all( [
-        import( '../../models/sale' ),
-        import( '../../models/shop' ),
-        import( '../../models/product' ),
+        import( './../../models/sale' ),
+        import( './../../models/shop' ),
+        import( './../../models/product' ),
     ] );
 }
 
@@ -34,14 +34,14 @@ export async function GET( request: Request ) {
             };
         }
 
-        const orders = await Order.find( query )
-            // .populate( { path: 'items.productId', model: Discount } )
-            // .populate( {
-            //     path: 'sale',
-            //     model: Sale,
-            //     populate: { path: 'shop', model: Shop }
-            // } )
-            .sort( { createdAt: -1 } );
+        const orders = await Order.find();
+        // .populate( { path: 'items.productId', model: Discount } )
+        // .populate( {
+        //     path: 'sale',
+        //     model: Sale,
+        //     populate: { path: 'shop', model: Shop }
+        // } )
+        // .sort( { createdAt: -1 } );
 
         return Response.json( orders );
     } catch ( error ) {

@@ -31,7 +31,7 @@ export async function GET( request: Request ) {
         const orders = await Order.find( query ).populate( { path: 'items.productId', model: Discount } ).populate( {
             path: 'sale',
             model: Sale,
-            populate: { path: 'shop' }
+            populate: { path: 'shop', model: Shop }
         } ).sort( { createdAt: -1 } );
 
         return Response.json( orders );

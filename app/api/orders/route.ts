@@ -1,16 +1,14 @@
 import dbConnect from '../../../db';
-import './../../models/index'; // 🔥 КРИТИЧЕСКИ ВАЖНО
+// import './../../models/index'; // 🔥 КРИТИЧЕСКИ ВАЖНО
 
-import Sale from './../../models/sale';
+// import Sale from './../../models/sale';
 import Order from './../../models/order';
-import Shop from './../../models/shop';
-import Discount from './../../models/product';
+// import Shop from './../../models/shop';
+// import Discount from './../../models/product';
 
 export async function GET( request: Request ) {
     try {
         await dbConnect();
-
-        console.log( 'Sale model:', Sale );
 
         const { searchParams } = new URL( request.url );
         const date = searchParams.get( 'date' );
@@ -29,7 +27,8 @@ export async function GET( request: Request ) {
             };
         }
 
-        const orders = await Order.find( query ).populate( { path: 'items.productId', model: Discount } )
+        const orders = await Order.find( query )
+            // .populate( { path: 'items.productId', model: Discount } )
             // .populate( {
             //     path: 'sale',
             //     model: Sale,

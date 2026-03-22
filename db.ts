@@ -1,4 +1,7 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
+// Register all models on the same mongoose instance used by dbConnect (avoids MissingSchemaError
+// when Next bundles multiple mongoose copies unless serverExternalPackages includes mongoose).
+import './app/models/index';
 
 const MONGODB_URI = process.env.MONGODB_URI;
 

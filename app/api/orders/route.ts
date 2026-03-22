@@ -1,10 +1,8 @@
 import dbConnect from '../../../db';
-// import './../../models/index'; // 🔥 КРИТИЧЕСКИ ВАЖНО
-
-// import Sale from './../../models/sale';
+// Side-effect: register every model referenced by Order (Sale, Discount, Shop) before queries.
+// Without this, Vercel/serverless can throw MissingSchemaError for unregistered refs.
+import '../../models/index';
 import Order from './../../models/order';
-// import Shop from './../../models/shop';
-// import Discount from './../../models/product';
 
 export async function GET( request: Request ) {
     try {

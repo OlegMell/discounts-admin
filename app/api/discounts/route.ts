@@ -1,7 +1,7 @@
 import Firecrawl from '@mendable/firecrawl-js';
 import mongoose from 'mongoose';
 import Discount from './../../models/product';
-import SaleModel from './../../models/sale';
+import Sale from './../../models/sale';
 
 const schema = {
     type: "object",
@@ -48,7 +48,7 @@ export async function GET( req: any ) {
 
         const discountDocs = await Discount.insertMany( products );
 
-        const sale = await SaleModel.create( {
+        const sale = await Sale.create( {
             shop: new mongoose.Types.ObjectId( `${ shop }` ),
             products: discountDocs.map( p => p._id ),
             minCartCost: minimalCartPrice ? parseFloat( minimalCartPrice ) : 0,

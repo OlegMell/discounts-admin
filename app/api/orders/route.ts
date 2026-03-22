@@ -1,12 +1,12 @@
 import dbConnect from './../../../db';
-
 import Order from './../../models/order';
-
+import Sale from './../../models/sale';
+import Shop from './../../models/shop';
+import Discount from './../../models/product';
 
 export async function GET( request: Request ) {
     try {
         await dbConnect();
-        await ensureRefModels();
 
         const { searchParams } = new URL( request.url );
         const date = searchParams.get( 'date' );
@@ -25,14 +25,14 @@ export async function GET( request: Request ) {
             };
         }
 
-        const orders = await Order.find().exec();
-        // .populate( { path: 'items.productId', model: Discount } )
-        // .populate( {
-        //     path: 'sale',
-        //     model: Sale,
-        //     populate: { path: 'shop', model: Shop }
-        // } )
-        // .sort( { createdAt: -1 } );
+        const orders = await Order.find( query )
+            .populate( { path: 'items.productId', model: Discount } )
+            .populate( {
+                path: 'sale',
+                model: Sale,
+                populate: { path: 'shop', model: Shop }
+            } )
+            .sort( { createdAt: -1 } ).exec()
 
         return Response.json( orders );
     } catch ( error ) {

@@ -1,5 +1,5 @@
 import dbConnect from './db';
-import '@/models/index';
+import './app/models/index';
 
 export async function register() {
     if (process.env.NEXT_RUNTIME !== 'nodejs') return;

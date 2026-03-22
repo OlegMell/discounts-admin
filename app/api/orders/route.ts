@@ -1,16 +1,7 @@
 import dbConnect from './../../../db';
+
 import Order from './../../models/order';
 
-/** Must run before Order queries: Order schema refs Sale, Shop, Discount.
- *  Other routes import those models directly; this route only imported Order, so the
- *  bundler could drop `db.ts` side-effect imports — dynamic import cannot be tree-shaken. */
-async function ensureRefModels() {
-    await Promise.all( [
-        import( './../../models/sale' ),
-        import( './../../models/shop' ),
-        import( './../../models/product' ),
-    ] );
-}
 
 export async function GET( request: Request ) {
     try {
@@ -34,7 +25,7 @@ export async function GET( request: Request ) {
             };
         }
 
-        const orders = await Order.find();
+        const orders = await Order.find().exec();
         // .populate( { path: 'items.productId', model: Discount } )
         // .populate( {
         //     path: 'sale',

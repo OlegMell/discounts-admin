@@ -1,11 +1,15 @@
+import dbConnect from '../../../db';
 import Order from './../../models/order';
 import Sale from './../../models/sale';
 import Shop from './../../models/shop';
 import Discount from './../../models/product';
 
+
 export async function GET( request: Request ) {
     try {
-        // await dbConnect();
+        await dbConnect();
+
+        console.log( 'Sale model:', Sale );
 
         const { searchParams } = new URL( request.url );
         const date = searchParams.get( 'date' );
@@ -23,10 +27,6 @@ export async function GET( request: Request ) {
                 $lt: endOfDay,
             };
         }
-
-        // if ( shop ) {
-        //     query[ 'sale.shop.title' ] = shop;
-        // }
 
         const orders = await Order.find( query ).populate( { path: 'items.productId', model: Discount } ).populate( {
             path: 'sale',

@@ -1,9 +1,10 @@
 import dbConnect from '../../../db';
-import Order from './../../models/order';
+import './../../models/index'; // 🔥 КРИТИЧЕСКИ ВАЖНО
+
 import Sale from './../../models/sale';
+import Order from './../../models/order';
 import Shop from './../../models/shop';
 import Discount from './../../models/product';
-
 
 export async function GET( request: Request ) {
     try {

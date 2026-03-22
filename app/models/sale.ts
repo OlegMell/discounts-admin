@@ -14,7 +14,8 @@ const SaleSchema = new mongoose.Schema( {
             ref: "Discount",
             required: true
         }
-    ]
+    ],
+    currency: { type: String, required: true },
 }, {
     timestamps: true
 } );

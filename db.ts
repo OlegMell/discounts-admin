@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { type Mongoose } from 'mongoose';
 // Register all models on the same mongoose instance used by dbConnect (avoids MissingSchemaError
 // when Next bundles multiple mongoose copies unless serverExternalPackages includes mongoose).
 import './app/models/index';
@@ -11,10 +11,14 @@ if ( !MONGODB_URI ) {
     )
 }
 
-let cached = global.mongoose;
+type MongooseCache = {
+    conn: Mongoose | null;
+    promise: Promise<Mongoose> | null;
+};
 
-if ( !cached ) {
-    cached = global.mongoose = { conn: null, promise: null };
+let cached: MongooseCache = global.mongoose ?? { conn: null, promise: null };
+if ( !global.mongoose ) {
+    global.mongoose = cached;
 }
 
 async function dbConnect() {

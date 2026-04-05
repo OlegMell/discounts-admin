@@ -119,6 +119,8 @@ export default function OrdersPage() {
         return acc;
     }, {} as Record<string, { shop: Order[ 'sale' ][ 'shop' ]; orders: Order[] }> );
 
+    console.log( groupedByShops );
+
     return (
         <div>
             <Header />
@@ -238,11 +240,11 @@ export default function OrdersPage() {
                                                             {order.items.map( ( item, i ) => (
                                                                 <li key={i}>
                                                                     <a
-                                                                        href={item.link}
+                                                                        href={item.productId.link}
                                                                         target="_blank"
                                                                         rel="noopener noreferrer"
                                                                     >
-                                                                        {item.name}
+                                                                        {item.productId.name}
                                                                     </a>{' '}
                                                                     (x{item.quantity}) — ₴
                                                                     {( item.price * item.quantity ).toFixed( 2 )}

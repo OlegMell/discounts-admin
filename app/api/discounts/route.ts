@@ -38,7 +38,7 @@ export async function GET( req: any ) {
     // Scrape a website
     const scrapeResponse: any = await app.agent( {
         urls: [ link ],
-        prompt: `Your task is to extract ${ count || 10 } products that currently have discounts from the website. If possible, also include only products with a price after discount between ${ minPrice } and ${ maxPrice }.`,
+        prompt: `Your task is to extract ${ count || 10 } products that currently have discounts from the website. If possible, also include only products with a price after discount between ${ minPrice } and ${ maxPrice }. Also check the link to product image. It should be a direct link to the image and should be working link. If the link is not working, try to find another on the page.`,
         schema: schema
     } );
 

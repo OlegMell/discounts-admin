@@ -11,6 +11,7 @@ export default function Shops() {
     const [ link, setLink ] = useState( '' );
     const [ isLoading, setIsLoading ] = useState( false );
     const [ showDialog, setShowDialog ] = useState( false );
+    const [ delivery, setDelivery ] = useState( '' );
 
     const fetchShops = async () => {
         try {
@@ -36,12 +37,18 @@ export default function Shops() {
             const res = await fetch( '/api/shops', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify( { title: title.trim(), link: link.trim() || undefined, prompt: prompt.trim()  } ),
+                body: JSON.stringify( {
+                    title: title.trim(),
+                    link: link.trim() || undefined,
+                    prompt: prompt.trim(),
+                    delivery: delivery
+                } ),
             } );
             if ( res.ok ) {
                 setTitle( '' );
                 setLink( '' );
                 setPrompt( '' );
+                setDelivery( '' );
                 await fetchShops();
                 setShowDialog( false );
             } else {
@@ -55,9 +62,8 @@ export default function Shops() {
     };
 
     const defaultPromptHandler = ( e ) => {
-        console.log( e.target.checked );
         setUseDefaultPrompt( e.target.checked );
-        setPrompt('');
+        setPrompt( '' );
     }
 
     return (
@@ -93,6 +99,13 @@ export default function Shops() {
                                 className='input mb-4'
                                 onChange={( e ) => setTitle( e.target.value )}
                                 required
+                            />
+                            <input
+                                type="text"
+                                placeholder="Тип доставки (необов'язково)"
+                                value={delivery}
+                                className='input mb-4'
+                                onChange={( e ) => setDelivery( e.target.value )}
                             />
                             <div className='p-4 mb-4'>
                                 <textarea

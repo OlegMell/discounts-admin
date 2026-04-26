@@ -14,8 +14,8 @@ const DEFAULT_PROMPT = 'Your task is to extract <count> products that currently 
 
 export async function POST( request: NextRequest ) {
     try {
-        const { title, link, prompt } = await request.json();
-        const newShop = new Shop( { title, link, prompt: prompt || DEFAULT_PROMPT } );
+        const { title, link, prompt, delivery } = await request.json();
+        const newShop = new Shop( { title, link, prompt: prompt || DEFAULT_PROMPT, delivery } );
         await newShop.save();
         return NextResponse.json( newShop, { status: 201 } );
     } catch ( error ) {

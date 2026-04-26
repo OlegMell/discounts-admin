@@ -6,6 +6,8 @@ import { useState, useEffect } from 'react';
 export default function Shops() {
     const [ shops, setShops ] = useState( [] );
     const [ title, setTitle ] = useState( '' );
+    const [ prompt, setPrompt ] = useState( '' );
+    const [ useDefaultPrompt, setUseDefaultPrompt ] = useState( true );
     const [ link, setLink ] = useState( '' );
     const [ isLoading, setIsLoading ] = useState( false );
     const [ showDialog, setShowDialog ] = useState( false );
@@ -34,11 +36,12 @@ export default function Shops() {
             const res = await fetch( '/api/shops', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify( { title: title.trim(), link: link.trim() || undefined } ),
+                body: JSON.stringify( { title: title.trim(), link: link.trim() || undefined, prompt: prompt.trim()  } ),
             } );
             if ( res.ok ) {
                 setTitle( '' );
                 setLink( '' );
+                setPrompt( '' );
                 await fetchShops();
                 setShowDialog( false );
             } else {
@@ -50,6 +53,12 @@ export default function Shops() {
             setIsLoading( false );
         }
     };
+
+    const defaultPromptHandler = ( e ) => {
+        console.log( e.target.checked );
+        setUseDefaultPrompt( e.target.checked );
+        setPrompt('');
+    }
 
     return (
         <div className='container-c'>
@@ -75,7 +84,7 @@ export default function Shops() {
             {showDialog && (
                 <div className="fixed inset-0 bg-black flex items-center justify-center z-50" onClick={() => setShowDialog( false )}>
                     <div className="p-6 rounded shadow-lg max-w-md w-full mx-4" onClick={( e ) => e.stopPropagation()}>
-                        <h2>Додати магазин</h2>
+                        <h1 className='text-xl font-bold mb-4'>Додати магазин</h1>
                         <form onSubmit={submitForm}>
                             <input
                                 type="text"
@@ -85,6 +94,20 @@ export default function Shops() {
                                 onChange={( e ) => setTitle( e.target.value )}
                                 required
                             />
+                            <div className='p-4 mb-4'>
+                                <textarea
+                                    placeholder="Промпт пошуку товарів"
+                                    value={prompt}
+                                    className='input mb-1'
+                                    disabled={useDefaultPrompt}
+                                    onChange={( e ) => setPrompt( e.target.value )}
+                                    required
+                                />
+                                <label className='flex gap-2 items-center'>
+                                    Встановити дефолтний промпт
+                                    <input type='checkbox' checked={useDefaultPrompt} onChange={( e ) => defaultPromptHandler( e )} />
+                                </label>
+                            </div>
                             <input
                                 type="url"
                                 placeholder="Посилання на магазин (необов'язково)"

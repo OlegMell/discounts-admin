@@ -1,6 +1,7 @@
 import Firecrawl from '@mendable/firecrawl-js';
 import mongoose from 'mongoose';
 import Discount from './../../models/product';
+import Shop from './../../models/shop';
 import Sale from './../../models/sale';
 
 const schema = {
@@ -34,16 +35,25 @@ export async function GET( req: any ) {
     const commision = searchParams.get( 'commision' );
     const currency = searchParams.get( 'currency' );
 
+    const _shop: { prompt: string } | null = await Shop.findOne( { _id: new mongoose.Types.ObjectId( `${ shop }` ) } );
+
+    console.log( { _shop } );
+
+    if ( !_shop ) {
+        return new Response( 'Scraping failed. Shop was not found!', { status: 404 } );
+    }
+
+    const prompt = _shop.prompt.replace( '<count>', count ).replace( '<minPrice>', minPrice ).replace( '<maxPrice>', maxPrice );
+
     const app = new Firecrawl( { apiKey: process.env.Firecrawl_API_KEY } );
     // Scrape a website
     const scrapeResponse: any = await app.agent( {
         urls: [ link ],
-        prompt: `Your task is to extract ${ count || 10 } products that currently have discounts from the website. If possible, also include only products with a price after discount between ${ minPrice } and ${ maxPrice }. Also check the link to product image. It should be a direct link to the image and should be working link. If the link is not working, try to find another on the page.`,
+        prompt,
         schema: schema
     } );
 
     if ( scrapeResponse.success ) {
-
         const products = scrapeResponse.data.products.map( ( p: any ) => ( { ...p, commision: parseFloat( commision || '1.1' ), shop: shop ? new mongoose.Types.ObjectId( `${ shop }` ) : undefined } ) );
         console.log( { products } );
 

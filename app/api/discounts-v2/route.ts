@@ -1,8 +1,9 @@
-import Firecrawl from '@mendable/firecrawl-js';
+import Firecrawl, { AgentResponse } from '@mendable/firecrawl-js';
 import mongoose from 'mongoose';
 import Discount from './../../models/product';
 import Shop from './../../models/shop';
 import Sale from './../../models/sale';
+import sale from './../../models/sale';
 
 const schema = {
     type: "object",
@@ -44,29 +45,32 @@ export async function GET( req: any ) {
     const prompt = _shop.prompt.replace( '<count>', count ).replace( '<minPrice>', minPrice ).replace( '<maxPrice>', maxPrice );
 
     const app = new Firecrawl( { apiKey: process.env.Firecrawl_API_KEY } );
-    // Scrape a website
-    const scrapeResponse: any = await app.agent( {
+
+    // start an agent on a website
+    const job: AgentResponse = await app.startAgent( {
         urls: [ link ],
         prompt,
         schema: schema
     } );
 
-    if ( scrapeResponse.success ) {
-        const products = scrapeResponse.data.products.map( ( p: any ) => ( { ...p, commision: parseFloat( commision || '1.1' ), shop: shop ? new mongoose.Types.ObjectId( `${ shop }` ) : undefined } ) );
-        console.log( { products } );
+    if ( job ) {
+        //     const products = scrapeResponse.data.products.map( ( p: any ) => ( { ...p, commision: parseFloat( commision || '1.1' ), shop: shop ? new mongoose.Types.ObjectId( `${ shop }` ) : undefined } ) );
+        //     console.log( { products } );
 
-        const discountDocs = await Discount.insertMany( products );
+        //     const discountDocs = await Discount.insertMany( products );
 
-        const sale = await Sale.create( {
-            shop: new mongoose.Types.ObjectId( `${ shop }` ),
-            products: discountDocs.map( p => p._id ),
-            minCartCost: minimalCartPrice ? parseFloat( minimalCartPrice ) : 0,
-            commission: parseFloat( commision || '1.1' ),
-            currency: currency || 'USD',
-            totalPrice: 100
-        } );
+        //     const sale = await Sale.create( {
+        //         shop: new mongoose.Types.ObjectId( `${ shop }` ),
+        //         products: discountDocs.map( p => p._id ),
+        //         minCartCost: minimalCartPrice ? parseFloat( minimalCartPrice ) : 0,
+        //         commission: parseFloat( commision || '1.1' ),
+        //         currency: currency || 'USD',
+        //         totalPrice: 100
+        //     } );
 
-        return new Response( JSON.stringify( { message: 'Sale created', count: products.length, sale } ), { status: 200 } );
+        //     return new Response( JSON.stringify( { message: 'Sale created', count: products.length, sale } ), { status: 200 } );
+
+        return new Response( JSON.stringify( job ), { status: 200 } );
     } else {
         return new Response( 'Scraping failed', { status: 500 } );
     }

@@ -1,0 +1,71 @@
+.card {
+    display: block;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    color: black;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 200px;
+}
+
+.card:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.imageWrapper {
+    background: #fafafa;
+    padding: 12px;
+    text-align: center;
+}
+
+.image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.info {
+    padding: 12px;
+}
+
+.name {
+    font-size: 14px;
+    line-height: 1.4;
+    height: 40px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.prices {
+    display: flex;
+    gap: 12px;
+}
+
+.price {
+    font-weight: bold;
+    color: #e60023;
+}
+
+.oldPrice {
+    text-decoration: line-through;
+    color: #888;
+    font-size: 13px;
+}
+
+.cartButton {
+    background-color: orangered;
+    color: var(--foreground);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: .8rem;
+    cursor: pointer;
+    margin-top: 8px;
+    width: 100%;
+    bottom: 0;
+}

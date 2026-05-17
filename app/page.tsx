@@ -123,6 +123,7 @@ export default function Home() {
     if ( typeof window === 'undefined' ) return;
     const savedId = localStorage.getItem( 'lastJobId' );
     if ( savedId ) {
+      alert( savedId );
       continueJobStatus( savedId );
     }
   }, [] );
